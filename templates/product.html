@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechTrade</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Product<span style="color: var(--pink);">Management</span></div>
+        <div class="icons">
+            <!-- Add any icons or links relevant to the product management -->
+            <a href="#"><i class="fa fa-plus"></i> Add Product</a>
+            <a href="#"><i class="fa fa-cog"></i> Settings</a>
+        </div>
+    </header>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="box-container">
+            <div class="box">
+                <h3>Contact Us</h3>
+                <a href="mailto:admin@example.com">admin@example.com</a>
+                <a href="tel:+123456789">+1 234 567 89</a>
+            </div>
+            <div class="box">
+                <h3>Follow Us</h3>
+                <!-- Add social media links or icons here -->
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="credit">© 2023 Product Management <span style="color: var(--pink);">All rights reserved.</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
