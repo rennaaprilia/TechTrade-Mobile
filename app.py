@@ -10,5 +10,9 @@ def hello():
 def index():
     return render_template('product.html')
 
+@app.route('/admin/customer')
+def index():
+    return render_template('customer.html')
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
