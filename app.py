@@ -128,5 +128,46 @@ def cart():
     # Render the cart template with the list of cart items and total price
     return render_template('cart.html', cart_items=cart_items, total_price=total_price)
 
+# Route to add a product to favorites
+@app.route('/add_to_favorites/<product_id>', methods=['GET'])
+def add_to_favorites(product_id):
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Find the product by its ObjectId
+    product = mongo.db.products.find_one({'_id': ObjectId(product_id)})
+    if not product:
+        # Handle the case where the product is not found
+        return redirect(url_for('products'))
+
+    # Create a favorites item
+    favorites_item = {
+        'user_id': session['user_id'],
+        'product_id': product['_id'],
+        'product_name': product['product_name'],
+        'price': product['price'],
+    }
+
+    # Add the favorites item to the favorites collection
+    mongo.db.favorites.insert_one(favorites_item)
+
+    # Redirect to the product listing page or wherever you want
+    return redirect(url_for('hello'))
+
+# Route to show favorite products
+@app.route('/favorites')
+def favorites():
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Retrieve user's favorite products from the favorites collection
+    user_id = session['user_id']
+    favorites = mongo.db.favorites.find({'user_id': user_id})
+
+    # Render the favorites template with the list of favorite products
+    return render_template('favorites.html', favorites=favorites)
+
 if __name__ == '__main__':
     app.run(debug=True)
