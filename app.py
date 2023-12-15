@@ -306,5 +306,14 @@ def delete_product(product_id):
     # Redirect to the product listing page or wherever you want
     return redirect(url_for('products'))
 
+@app.route('/admin/orders')
+def orders():
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    # Retrieve all orders from the orders collection
+    orders_cursor = mongo.db.orders.find()
+    orders = list(orders_cursor)
+    return render_template('order.html', orders=orders)
+
 if __name__ == '__main__':
     app.run(debug=True)
