@@ -169,5 +169,10 @@ def favorites():
     # Render the favorites template with the list of favorite products
     return render_template('favorites.html', favorites=favorites)
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True)
