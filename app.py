@@ -174,5 +174,11 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@app.route('/admin/dashboard')
+def adminDashboard():
+    if session['role'] == 'admin':
+        return render_template('admindashboard.html')
+    return 'Access Denied'
+
 if __name__ == '__main__':
     app.run(debug=True)
