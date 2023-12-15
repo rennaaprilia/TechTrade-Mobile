@@ -315,5 +315,15 @@ def orders():
     orders = list(orders_cursor)
     return render_template('order.html', orders=orders)
 
+@app.route('/admin/messages')
+def show_messages():
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    # Retrieve all messages from the contact collection
+    messages_cursor = mongo.db.messages.find()
+    messages = list(messages_cursor)
+    # Render the template with the list of messages
+    return render_template('messages.html', messages=messages)
+
 if __name__ == '__main__':
     app.run(debug=True)
