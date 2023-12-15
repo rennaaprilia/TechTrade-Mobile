@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechTrade</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+    <!-- header section starts -->
+    <header>
+
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+
+        <a href="#" class="logo">TechTrade<span>.</span></a>
+
+        <nav class="navbar">
+            <a href="{{ url_for('hello') }}">Home</a>
+            <a href="#about">About</a>
+            <a href="#product">Product</a>
+            <a href="#review">Review</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="{{ url_for('favorites') }}" class="fas fa-heart"></a>
+            <a href="{{ url_for('cart') }}" class="fas fa-shopping-cart"></a>
+            <a href="#" class="fas fa-user"></a>
+        </div>
+
+    </header>
+    <!-- header section ends -->
+
+    <!-- about section starts -->
+    <section class="about product" id="about">
+
+        <h1 class="heading"> <span> Your </span> Carts </h1>
+        <div>
+            <section class="product" id="product" style="
+    text-align: center;
+    font-size: large;">
+                <div class="box-container" style="
+                place-content: center;">
+                    <!-- Display the list of cart items -->
+                    <ul>
+
+                        {% for item in cart_items %}
+                        <li>{{ item.product_name }} - ${{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Display the total price -->
+
+                    <p>Total Price: ${{ total_price }}</p>
+                </div>
+                <form method="post" action="{{ url_for('cart') }}">
+                    <label for="payment_method">Payment Method:</label>
+                    <select name="payment_method" id="payment_method" required>
+                        <option value="cash">Cash</option>
+                        <option value="credit">Credit</option>
+                        <!-- Add more payment options as needed -->
+                    </select>
+                    <br>
+                    <button type="submit">Place Order</button>
+                </form>
+        </div>
+    </section>
+
+    </section>
+    <!-- about section ends -->
+
+</body>
+
+</html>
