@@ -180,5 +180,69 @@ def adminDashboard():
         return render_template('admindashboard.html')
     return 'Access Denied'
 
+@app.route('/admin/products', methods=['GET', 'POST'])
+def products():
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    if request.method == 'POST':
+        # Get product data from the form
+        product_id = request.form.get('product_id')
+        product_name = request.form.get('product_name')
+        price = request.form.get('price')
+        category = request.form.get('category')
+
+        # Check if the 'product_image' file is present in the form
+        if 'product_image' in request.files:
+            product_image = request.files['product_image']
+
+            # Save the file to the 'uploads' folder
+            upload_folder = app.config['UPLOAD_FOLDER']
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            product_image_path = os.path.join(upload_folder, product_image.filename)
+            product_image.save(product_image_path)
+            product_image_path = product_image_path.replace("static/", "")
+        else:
+            # Handle the case where no image is provided
+            product_image_path = None
+
+        # Create a dictionary representing the product
+        product_data = {
+            'product_name': product_name,
+            'product_image_path': product_image_path,
+            'price': price,
+            'category': category
+        }
+
+        # Insert or update the product data into the 'products' collection
+        if product_id:
+            # If product_id is present, update the existing product
+            mongo.db.products.update_one({'_id': ObjectId(product_id)}, {'$set': product_data})
+        else:
+            # If product_id is not present, insert a new product
+            mongo.db.products.insert_one(product_data)
+
+        # Redirect to the product listing page or wherever you want
+        return redirect(url_for('products'))
+
+    # Display the product listing page
+    products = mongo.db.products.find()
+    return render_template('products.html', products=products)
+
+# Render edit.html for editing a product
+@app.route('/admin/edit_product/<product_id>', methods=['GET'])
+def edit_product(product_id):
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    # Find the product by its ObjectId
+    product = mongo.db.products.find_one({'_id': ObjectId(product_id)})
+    if not product:
+        # Handle the case where the product is not found
+        return redirect(url_for('products'))
+
+    # Render the edit.html template with the product data
+    return render_template('edit.html', product=product)
+
 if __name__ == '__main__':
     app.run(debug=True)
