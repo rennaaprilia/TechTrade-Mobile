@@ -244,5 +244,43 @@ def edit_product(product_id):
     # Render the edit.html template with the product data
     return render_template('edit.html', product=product)
 
+# Handle form submission for updating a product
+@app.route('/admin/edit_product/<product_id>', methods=['POST'])
+def update_product(product_id):
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    # Find the product by its ObjectId
+    product = mongo.db.products.find_one({'_id': ObjectId(product_id)})
+    if not product:
+        # Handle the case where the product is not found
+        return redirect(url_for('products'))
+
+    # Get updated product data from the form
+    product_name = request.form.get('product_name')
+    price = request.form.get('price')
+    category = request.form.get('category')
+
+    # Check if the 'product_image' file is present in the form
+    if 'product_image' in request.files:
+        product_image = request.files['product_image']
+
+        # Save the file to the 'uploads' folder
+        upload_folder = app.config['UPLOAD_FOLDER']
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+
+        product_image_path = os.path.join(upload_folder, product_image.filename)
+        product_image.save(product_image_path)
+        product_image_path = product_image_path.replace("static/", "")
+
+        # Update the product image path
+        mongo.db.products.update_one({'_id': ObjectId(product_id)}, {'$set': {'product_image_path': product_image_path}})
+
+    # Update other product fields
+    mongo.db.products.update_one({'_id': ObjectId(product_id)}, {'$set': {'product_name': product_name, 'price': price, 'category': category}})
+
+    # Redirect to the product listing page or wherever you want
+    return redirect(url_for('products'))
+
 if __name__ == '__main__':
     app.run(debug=True)
