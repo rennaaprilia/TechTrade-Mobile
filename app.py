@@ -282,5 +282,29 @@ def update_product(product_id):
     # Redirect to the product listing page or wherever you want
     return redirect(url_for('products'))
 
+# Route to delete a product
+@app.route('/admin/delete_product/<product_id>', methods=['GET'])
+
+def delete_product(product_id):
+    if session['role'] != 'admin':
+       return 'Access Denied'
+    # Find the product by its ObjectId
+    product = mongo.db.products.find_one({'_id': ObjectId(product_id)})
+    if not product:
+        # Handle the case where the product is not found
+        return redirect(url_for('products'))
+
+    # Delete the product from the database
+    mongo.db.products.delete_one({'_id': ObjectId(product_id)})
+
+    # Optionally, delete the associated image file from the server
+    if 'product_image_path' in product:
+        image_path = product['product_image_path']
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+    # Redirect to the product listing page or wherever you want
+    return redirect(url_for('products'))
+
 if __name__ == '__main__':
     app.run(debug=True)
