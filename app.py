@@ -325,5 +325,26 @@ def show_messages():
     # Render the template with the list of messages
     return render_template('messages.html', messages=messages)
 
+@app.route('/contact', methods=[ 'POST'])
+def contact():
+    if request.method == 'POST':
+        # Get form data
+        name = request.form.get('name')
+        email = request.form.get('email')
+        number = request.form.get('number')
+        message = request.form.get('message')
+
+        # Save the message to the messages collection
+        mongo.db.messages.insert_one({
+            'name': name,
+            'email': email,
+            'number': number,
+            'message': message,
+            'timestamp': datetime.utcnow()
+        })
+
+        # Redirect to a thank you or confirmation page
+        return redirect(url_for('hello'))
+
 if __name__ == '__main__':
     app.run(debug=True)
