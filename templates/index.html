@@ -11,6 +11,10 @@
 
   <!-- custom css file link -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+  <!-- Logo Title -->
+  <link rel="icon" href="static/images/logo.png" type="png">
+
 </head>
 
 <body>
@@ -31,7 +35,7 @@
 
     <div class="icons">
       <a href="{{ url_for('favorites') }}" class="fas fa-heart"></a>
-      <a href="{{ url_for('cart') }}" class="fas fa-shopping-cart"></a>
+      <a href="{{ url_for('login') }}" class="fas fa-shopping-cart"></a>
       <a href="{{ url_for('login') }}" class="fas fa-user"></a>
     </div>
   </header>
