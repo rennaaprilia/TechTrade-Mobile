@@ -12,6 +12,9 @@
     <!-- custom css file link -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+    <!-- Logo Title -->
+    <link rel="icon" href="static/images/logo.png" type="png">
+
 </head>
 
 <body>
@@ -34,15 +37,55 @@
     <section class="home" id="home">
 
         <div class="content">
-            <h3>TechTrade Mobile</h3>
+            <h3>TechTrade<span style="color: var(--pink)"> Management </span></h3>
             <a href="{{ url_for('products') }}" class="btn">Products</a>
-            <a href="{{ url_for('orders') }}" class="btn">Orders</a>
-            <a href="{{ url_for('show_messages') }}" class="btn">Messages</a>
+            <a href="{{ url_for('orders') }}" class="btn">Orders
+                <span class="badge" id="notification"></span>
+            </a>
+            <a href="{{ url_for('show_messages') }}" class="btn">Messages
+                <span id="notificationMessage" class="badge"></span>
+            </a>
         </div>
 
     </section>
     <!-- home section ends -->
+    <script>function fetchNewOrders() {
+            fetch('/get_new_orders')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationElement = document.getElementById('notification');
+                    if (data.count > 0) {
+                        notificationElement.innerHTML = data.count;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
+        setInterval(fetchNewOrders, 5000);
+        fetchNewOrders();
+    </script>
+
+    <script>
+        function fetchNewMessages() {
+            fetch('/get_new_message')
+                .then(response => response.json())
+                .then(data => {
+                    // Tampilkan notifikasi jika ada pesanan baru
+                    const notificationElement = document.getElementById('notificationMessage');
+                    if (data.count > 0) {
+                        notificationElement.innerHTML = data.count
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        setInterval(fetchNewMessages, 5000);
+        fetchNewMessages();
+    </script>
 </body>
 
 </html>
