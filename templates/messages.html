@@ -10,15 +10,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+
   <!-- custom css file link -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+  <!-- Logo Title -->
+  <link rel="icon" href="static/images/logo.png" type="png">
+
 </head>
 
 <body>
   <!-- Header Section -->
   <header>
     <div class="logo">
-      Order<span style="color: var(--pink)"> Management </span>
+      Messages<span style="color: var(--pink)"> Management </span>
     </div>
     <div class="icons"></div>
 
@@ -44,12 +49,21 @@
           </thead>
           <tbody>
             {% for message in messages %}
-            <tr>
-              <td>{{ message.name }}</td>
-              <td>{{ message.email }}</td>
-              <td>{{ message.number }}</td>
-              <td>{{ message.message }}</td>
+            {% if message.status == 'new' %}
+            <tr class="bg-blue-300">
+              <td class="py-1 px-3">{{ message.name }}</td>
+              <td class="py-1 px-3">{{ message.email }}</td>
+              <td class="py-1 px-3">{{ message.number }}</td>
+              <td class="py-1 px-3">{{ message.message }}</td>
             </tr>
+            {% else %}
+            <tr>
+              <td class="py-1 px-3">{{ message.name }}</td>
+              <td class="py-1 px-3">{{ message.email }}</td>
+              <td class="py-1 px-3">{{ message.number }}</td>
+              <td class="py-1 px-3">{{ message.message }}</td>
+            </tr>
+            {% endif %}
             {% endfor %}
           </tbody>
         </table>
