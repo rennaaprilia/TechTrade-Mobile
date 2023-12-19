@@ -10,8 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+
     <!-- custom css file link -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+    <!-- Logo Title -->
+    <link rel="icon" href="static/images/logo.png" type="png">
+
 </head>
 
 <body>
@@ -44,7 +49,17 @@
                         </tr>
                     </thead>
                     <tbody>
+
                         {% for order in orders %}
+                        {% if order.status == 'new' %}
+                        <tr class="bg-blue-300">
+                            <td>{{ order.user_name}}</td>
+                            <td>{{ order.order_time }}</td>
+                            <td>{{ order.total_products }}</td>
+                            <td>{{ order.payment_method }}</td>
+                            <td>${{ order.total_price }}</td>
+                        </tr>
+                        {% else %}
                         <tr>
                             <td>{{ order.user_name}}</td>
                             <td>{{ order.order_time }}</td>
@@ -52,6 +67,7 @@
                             <td>{{ order.payment_method }}</td>
                             <td>${{ order.total_price }}</td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
